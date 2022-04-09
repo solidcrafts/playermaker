@@ -1,12 +1,14 @@
 package io.solidcrafts.playermaker.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import io.solidcrafts.playermaker.databinding.FragmentMainBinding
+import io.solidcrafts.playermaker.domain.MovieTag.*
 
 class MainFragment : Fragment() {
 
@@ -26,19 +28,19 @@ class MainFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        binding.recyclerView.adapter = MoviesAdapter(MovieClickedListener {
+        binding.recyclerView.adapter = NestedHorizontalAdapter(MovieClickedListener {
             viewModel.notifyMovieClicked(it)
         })
 
         viewModel.navigateToSelectedMovie.observe(viewLifecycleOwner) { selectedMovie ->
             if (selectedMovie != null) {
-                //navigate...
+                Log.i("Nav", "Navigate to ${selectedMovie.title}")
                 viewModel.navigateToSelectedMovieComplete()
             }
         }
 
-        viewModel.movies.observe(viewLifecycleOwner) { data ->
-            (binding.recyclerView.adapter as MoviesAdapter).apply {
+        viewModel.movies(TOP_RATED).observe(viewLifecycleOwner) { data ->
+            (binding.recyclerView.adapter as NestedHorizontalAdapter).apply {
                 submitList(data)
             }
         }

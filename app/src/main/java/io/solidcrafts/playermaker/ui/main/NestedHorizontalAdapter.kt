@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.solidcrafts.playermaker.databinding.MovieItemBinding
 import io.solidcrafts.playermaker.domain.DomainMovie
 
-class MoviesAdapter(private val clickedListener: MovieClickedListener) :
+class NestedHorizontalAdapter(private val clickedListener: MovieClickedListener) :
     ListAdapter<DomainMovie, MovieItemViewHolder>(MovieDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieItemViewHolder {

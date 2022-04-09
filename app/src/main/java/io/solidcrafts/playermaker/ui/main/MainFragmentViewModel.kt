@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.*
 import io.solidcrafts.playermaker.database.MoviesDatabase
 import io.solidcrafts.playermaker.domain.DomainMovie
+import io.solidcrafts.playermaker.domain.MovieTag
 import io.solidcrafts.playermaker.network.NetworkService
 import io.solidcrafts.playermaker.repository.MoviesRepository
 import io.solidcrafts.playermaker.util.LoadingStatus
@@ -11,28 +12,27 @@ import kotlinx.coroutines.launch
 
 class MainFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _loadingStatus = MutableLiveData<LoadingStatus>()
-    val status: LiveData<LoadingStatus> = _loadingStatus
+    private val moviesRepository =
+        MoviesRepository(MoviesDatabase.getInstance(application), NetworkService)
 
     private val _navigateToSelectedMovie = MutableLiveData<DomainMovie?>()
     val navigateToSelectedMovie: LiveData<DomainMovie?> = _navigateToSelectedMovie
 
-    private val moviesRepository =
-        MoviesRepository(MoviesDatabase.getInstance(application), NetworkService)
-    val movies = moviesRepository.movies
+    fun movies(tag: MovieTag) = moviesRepository.movies(tag)
+    val status: LiveData<LoadingStatus> = moviesRepository.status()
 
-    init {
-        viewModelScope.launch {
-            moviesRepository.refreshMovies()
-        }
+    fun notifyMovieClicked(it: DomainMovie) {
+        _navigateToSelectedMovie.value = it
     }
 
     fun navigateToSelectedMovieComplete() {
         _navigateToSelectedMovie.value = null
     }
 
-    fun notifyMovieClicked(it: DomainMovie) {
-
+    init {
+        viewModelScope.launch {
+            moviesRepository.refreshMovies()
+        }
     }
 
     class Factory(private val app: Application) : ViewModelProvider.Factory {
