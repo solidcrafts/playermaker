@@ -24,19 +24,17 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
 }
 
 @BindingAdapter("loadingStatus")
-fun bindStatus(imageView: ImageView, status: LoadingStatus?) {
-    when (status) {
-        LoadingStatus.LOADING -> {
-            imageView.visibility = View.VISIBLE
-            imageView.setImageResource(R.drawable.loading_animation)
-        }
-        LoadingStatus.ERROR -> {
-            imageView.visibility = View.VISIBLE
-            imageView.setImageResource(R.drawable.ic_connection_error)
-        }
-        LoadingStatus.DONE -> {
-            imageView.visibility = View.GONE
-        }
-        null -> TODO()
+fun bindStatus(imageView: ImageView, status: LoadingStatus?) = when (status) {
+    LoadingStatus.LOADING -> {
+        imageView.visibility = View.VISIBLE
+        imageView.setImageResource(R.drawable.loading_animation)
     }
+    LoadingStatus.ERROR -> {
+        imageView.visibility = View.VISIBLE
+        imageView.setImageResource(R.drawable.ic_connection_error)
+    }
+    LoadingStatus.DONE -> {
+        imageView.visibility = View.GONE
+    }
+    else -> {}
 }
