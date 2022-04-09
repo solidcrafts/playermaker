@@ -11,7 +11,7 @@ data class NetworkMoviesResponse(val results: List<NetworkMovie>)
 data class NetworkMovie(
     val id: Int,
     val title: String,
-    @Json(name = "poster_path") val posterUrl: String
+    @Json(name = "poster_path") val posterPath: String
 )
 
 fun NetworkMoviesResponse.asDatabaseModel(): Array<DatabaseMovie> {
@@ -19,7 +19,7 @@ fun NetworkMoviesResponse.asDatabaseModel(): Array<DatabaseMovie> {
         DatabaseMovie(
             id = it.id,
             title = it.title,
-            posterUrl = it.posterUrl
+            posterPath = it.posterPath
         )
     }.toTypedArray()
 }

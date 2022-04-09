@@ -8,10 +8,19 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import io.solidcrafts.playermaker.util.LoadingStatus
 
-@BindingAdapter("imageUrl")
-fun bindImage(imgView: ImageView, imgUrl: String?) {
-    imgUrl?.let {
-        val imgUri = imgUrl.toUri().buildUpon().scheme("https").build()
+@BindingAdapter("goneIfNotNull")
+fun goneIfNotNull(view: View, it: Any?) {
+    view.visibility = if (it != null) View.GONE else View.VISIBLE
+}
+
+@BindingAdapter(value = ["movieDbApiPosterPath", "movieDbApiPosterSize"])
+fun bindMovieDbImage(imgView: ImageView, path: String?, size: Int? = 200) {
+    path?.let {
+
+        val imgUri =
+            "https://image.tmdb.org/t/p/w${size}/${it}"
+                .toUri().buildUpon().scheme("https").build()
+
         Glide.with(imgView.context)
             .load(imgUri)
             .apply(

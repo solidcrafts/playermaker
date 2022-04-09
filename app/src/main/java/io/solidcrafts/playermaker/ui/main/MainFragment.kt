@@ -22,8 +22,27 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentMainBinding.inflate(inflater)
+
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+
+        binding.recyclerView.adapter = MoviesAdapter(MovieClickedListener {
+            viewModel.notifyMovieClicked(it)
+        })
+
+        viewModel.navigateToSelectedMovie.observe(viewLifecycleOwner) { selectedMovie ->
+            if (selectedMovie != null) {
+                //navigate...
+                viewModel.navigateToSelectedMovieComplete()
+            }
+        }
+
+        viewModel.movies.observe(viewLifecycleOwner) { data ->
+            (binding.recyclerView.adapter as MoviesAdapter).apply {
+                submitList(data)
+            }
+        }
+
         return binding.root
     }
 }

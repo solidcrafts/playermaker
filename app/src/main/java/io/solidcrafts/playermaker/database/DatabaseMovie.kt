@@ -9,7 +9,7 @@ data class DatabaseMovie constructor(
     @PrimaryKey
     val id: Int,
     val title: String,
-    val posterUrl: String
+    val posterPath: String
 )
 
 fun List<DatabaseMovie>.asDomainModel(): List<DomainMovie> {
@@ -17,7 +17,7 @@ fun List<DatabaseMovie>.asDomainModel(): List<DomainMovie> {
         DomainMovie(
             id = it.id,
             title = it.title,
-            posterUrl = it.posterUrl
+            posterPath = it.posterPath
         )
     }
 }

@@ -31,6 +31,10 @@ class MainFragmentViewModel(application: Application) : AndroidViewModel(applica
         _navigateToSelectedMovie.value = null
     }
 
+    fun notifyMovieClicked(it: DomainMovie) {
+
+    }
+
     class Factory(private val app: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MainFragmentViewModel::class.java)) {
