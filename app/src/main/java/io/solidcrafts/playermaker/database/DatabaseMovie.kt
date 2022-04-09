@@ -8,7 +8,7 @@ import io.solidcrafts.playermaker.domain.DomainMovie
 data class DatabaseMovie constructor(
     @PrimaryKey
     val id: Int,
-    val name: String,
+    val title: String,
     val posterUrl: String
 )
 
@@ -16,7 +16,7 @@ fun List<DatabaseMovie>.asDomainModel(): List<DomainMovie> {
     return map {
         DomainMovie(
             id = it.id,
-            name = it.name,
+            title = it.title,
             posterUrl = it.posterUrl
         )
     }
