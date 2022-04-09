@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import io.solidcrafts.playermaker.databinding.FragmentMainBinding
+import io.solidcrafts.playermaker.domain.CategorizedMovies
 import io.solidcrafts.playermaker.domain.MovieTag.*
 
 class MainFragment : Fragment() {
@@ -28,7 +29,7 @@ class MainFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        binding.recyclerView.adapter = NestedHorizontalAdapter(MovieClickedListener {
+        binding.recyclerView.adapter = MainVerticalAdapter(MovieClickedListener {
             viewModel.notifyMovieClicked(it)
         })
 
@@ -40,8 +41,14 @@ class MainFragment : Fragment() {
         }
 
         viewModel.movies(TOP_RATED).observe(viewLifecycleOwner) { data ->
-            (binding.recyclerView.adapter as NestedHorizontalAdapter).apply {
-                submitList(data)
+            (binding.recyclerView.adapter as MainVerticalAdapter).apply {
+                val categories = arrayListOf<CategorizedMovies>()
+
+                categories.add(CategorizedMovies(UPCOMING, data))
+                categories.add(CategorizedMovies(POPULAR, data))
+                categories.add(CategorizedMovies(TOP_RATED, data))
+
+                submitList(categories)
             }
         }
 

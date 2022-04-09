@@ -4,7 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="adapter"
+            type="io.solidcrafts.playermaker.ui.main.NestedHorizontalAdapter" />
 
+        <variable
+            name="categorizedMovies"
+            type="io.solidcrafts.playermaker.domain.CategorizedMovies" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,11 +18,12 @@
         android:layout_height="380dp">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/categoryTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
+            android:text="@{categorizedMovies.title()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -30,10 +37,11 @@
             android:orientation="horizontal"
             android:padding="5dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:adapter="@{adapter}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/categoryTitle"
             app:layout_constraintVertical_bias="0.0"
             tools:listitem="@layout/movie_item" />
 
