@@ -2,12 +2,20 @@ package io.solidcrafts.playermaker.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import io.solidcrafts.playermaker.database.DatabaseMovie
 
 @Dao
 interface MoviesDatabaseDao {
     @Query("select * from databasemovie")
-    fun getMovies(): LiveData<List<DatabaseMovie>>
+    fun getAllMovies(): LiveData<List<DatabaseMovie>>
+
+    @Query("select * from databasemovie where isPopular")
+    fun getPopularMovies(): LiveData<List<DatabaseMovie>>
+
+    @Query("select * from databasemovie where isUpcoming")
+    fun getUpcomingMovies(): LiveData<List<DatabaseMovie>>
+
+    @Query("select * from databasemovie where isTopRated")
+    fun getTopRateMovies(): LiveData<List<DatabaseMovie>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg videos: DatabaseMovie)

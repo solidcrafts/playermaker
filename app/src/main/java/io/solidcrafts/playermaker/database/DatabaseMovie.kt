@@ -9,7 +9,10 @@ data class DatabaseMovie constructor(
     @PrimaryKey
     val id: Int,
     val title: String,
-    val posterPath: String
+    val posterPath: String,
+    val isPopular: Boolean,
+    val isUpcoming: Boolean,
+    val isTopRated: Boolean
 )
 
 fun List<DatabaseMovie>.asDomainModel(): List<DomainMovie> {
