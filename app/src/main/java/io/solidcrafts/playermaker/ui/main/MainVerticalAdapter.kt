@@ -7,34 +7,41 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.solidcrafts.playermaker.databinding.MoviesRowBinding
 import io.solidcrafts.playermaker.domain.MoviesRow
+import java.util.HashMap
 
 class MainVerticalAdapter(private val clickedListener: MovieClickedListener) :
     ListAdapter<MoviesRow, RowItemViewHolder>(RowDiffCallback()) {
-    private val nestedAdapters = arrayListOf<NestedHorizontalAdapter>()
+    private var nestedAdapters: HashMap<Int, NestedHorizontalAdapter> = hashMapOf()
 
     fun submitChanges(data: List<MoviesRow>) {
         submitList(data)
-        notifyDataSetChanged()
+        for (nestedAdapter in nestedAdapters) {
+            nestedAdapter.value.submitList(data[nestedAdapter.key].data)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RowItemViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = MoviesRowBinding.inflate(layoutInflater, parent, false).apply {
             adapter = NestedHorizontalAdapter(clickedListener)
-            nestedAdapters.add(adapter as NestedHorizontalAdapter);
         }
         return RowItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: RowItemViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(position, getItem(position), nestedAdapters)
     }
 }
 
-class RowItemViewHolder(private val binding: MoviesRowBinding) :
+class RowItemViewHolder(
+
+    private val binding: MoviesRowBinding,
+
+) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: MoviesRow) {
+    fun bind(index: Int,item: MoviesRow, registry: HashMap<Int, NestedHorizontalAdapter>) {
+        registry[index] = binding.adapter as NestedHorizontalAdapter
         binding.adapter?.submitList(item.data)
         binding.categorizedMovies = item
         binding.executePendingBindings()
