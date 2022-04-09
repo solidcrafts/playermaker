@@ -28,7 +28,7 @@ class RowItemViewHolder(private val binding: MoviesRowBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: CategorizedMovies) {
-        binding.adapter.submitList(item.data)
+        binding.adapter?.submitList(item.data)
         binding.categorizedMovies = item
         binding.executePendingBindings()
     }
