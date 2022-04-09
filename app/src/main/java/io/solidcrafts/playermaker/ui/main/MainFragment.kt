@@ -8,15 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import io.solidcrafts.playermaker.databinding.FragmentMainBinding
-import io.solidcrafts.playermaker.domain.CategorizedMovies
-import io.solidcrafts.playermaker.domain.MovieTag.*
 
 class MainFragment : Fragment() {
 
     private val viewModel: MainFragmentViewModel by lazy {
         ViewModelProvider(
-            this,
-            MainFragmentViewModel.Factory(requireActivity().application)
+            this, MainFragmentViewModel.Factory(requireActivity().application)
         )[MainFragmentViewModel::class.java]
     }
 
@@ -33,22 +30,14 @@ class MainFragment : Fragment() {
             viewModel.notifyMovieClicked(it)
         })
 
+        viewModel.observableMovieRows().observe(viewLifecycleOwner) { data ->
+            (binding.recyclerView.adapter as MainVerticalAdapter).submitChanges(data)
+        }
+
         viewModel.navigateToSelectedMovie.observe(viewLifecycleOwner) { selectedMovie ->
             if (selectedMovie != null) {
                 Log.i("Nav", "Navigate to ${selectedMovie.title}")
                 viewModel.navigateToSelectedMovieComplete()
-            }
-        }
-
-        viewModel.movies(TOP_RATED).observe(viewLifecycleOwner) { data ->
-            (binding.recyclerView.adapter as MainVerticalAdapter).apply {
-                val categories = arrayListOf<CategorizedMovies>()
-
-                categories.add(CategorizedMovies(UPCOMING, data))
-                categories.add(CategorizedMovies(POPULAR, data))
-                categories.add(CategorizedMovies(TOP_RATED, data))
-
-                submitList(categories)
             }
         }
 

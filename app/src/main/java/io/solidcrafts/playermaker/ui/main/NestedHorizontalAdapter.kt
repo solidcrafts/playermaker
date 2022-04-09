@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.solidcrafts.playermaker.databinding.MovieItemBinding
-import io.solidcrafts.playermaker.domain.DomainMovie
+import io.solidcrafts.playermaker.domain.Movie
 
 class NestedHorizontalAdapter(private val clickedListener: MovieClickedListener) :
-    ListAdapter<DomainMovie, MovieItemViewHolder>(MovieDiffCallback()) {
+    ListAdapter<Movie, MovieItemViewHolder>(MovieDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieItemViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -25,23 +25,23 @@ class NestedHorizontalAdapter(private val clickedListener: MovieClickedListener)
 class MovieItemViewHolder(private val binding: MovieItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(clickedListener: MovieClickedListener, item: DomainMovie) {
+    fun bind(clickedListener: MovieClickedListener, item: Movie) {
         binding.clickListener = clickedListener
         binding.movie = item
         binding.executePendingBindings()
     }
 }
 
-class MovieClickedListener(val listener: (movie: DomainMovie) -> Unit) {
-    fun onClick(movie: DomainMovie) = listener(movie)
+class MovieClickedListener(val listener: (movie: Movie) -> Unit) {
+    fun onClick(movie: Movie) = listener(movie)
 }
 
-class MovieDiffCallback : DiffUtil.ItemCallback<DomainMovie>() {
-    override fun areItemsTheSame(oldItem: DomainMovie, newItem: DomainMovie): Boolean {
+class MovieDiffCallback : DiffUtil.ItemCallback<Movie>() {
+    override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: DomainMovie, newItem: DomainMovie): Boolean {
-        return oldItem == newItem;
+    override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+        return oldItem == newItem
     }
 }

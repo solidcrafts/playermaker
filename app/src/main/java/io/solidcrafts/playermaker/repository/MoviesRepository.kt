@@ -6,7 +6,7 @@ import androidx.lifecycle.Transformations
 import io.solidcrafts.playermaker.database.DatabaseMovie
 import io.solidcrafts.playermaker.database.MoviesDatabase
 import io.solidcrafts.playermaker.database.asDomainModel
-import io.solidcrafts.playermaker.domain.DomainMovie
+import io.solidcrafts.playermaker.domain.Movie
 import io.solidcrafts.playermaker.domain.MovieTag
 import io.solidcrafts.playermaker.domain.MovieTag.*
 import io.solidcrafts.playermaker.network.NetworkService
@@ -31,13 +31,13 @@ class MoviesRepository(
 
     private fun transformToDomainModels(
         data: LiveData<List<DatabaseMovie>>
-    ): LiveData<List<DomainMovie>> {
+    ): LiveData<List<Movie>> {
         return Transformations.map(data) {
             it.asDomainModel()
         }
     }
 
-    fun movies(tag: MovieTag? = null): LiveData<List<DomainMovie>> = when (tag) {
+    fun movies(tag: MovieTag? = null): LiveData<List<Movie>> = when (tag) {
         POPULAR -> popularMovies
         UPCOMING -> upcomingMovies
         TOP_RATED -> topRatedMovies

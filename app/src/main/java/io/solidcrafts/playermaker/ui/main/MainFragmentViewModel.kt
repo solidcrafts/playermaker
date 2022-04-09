@@ -3,8 +3,9 @@ package io.solidcrafts.playermaker.ui.main
 import android.app.Application
 import androidx.lifecycle.*
 import io.solidcrafts.playermaker.database.MoviesDatabase
-import io.solidcrafts.playermaker.domain.DomainMovie
-import io.solidcrafts.playermaker.domain.MovieTag
+import io.solidcrafts.playermaker.domain.MoviesRow
+import io.solidcrafts.playermaker.domain.Movie
+import io.solidcrafts.playermaker.domain.MovieTag.*
 import io.solidcrafts.playermaker.network.NetworkService
 import io.solidcrafts.playermaker.repository.MoviesRepository
 import io.solidcrafts.playermaker.util.LoadingStatus
@@ -15,13 +16,34 @@ class MainFragmentViewModel(application: Application) : AndroidViewModel(applica
     private val moviesRepository =
         MoviesRepository(MoviesDatabase.getInstance(application), NetworkService)
 
-    private val _navigateToSelectedMovie = MutableLiveData<DomainMovie?>()
-    val navigateToSelectedMovie: LiveData<DomainMovie?> = _navigateToSelectedMovie
+    private val _navigateToSelectedMovie = MutableLiveData<Movie?>()
+    val navigateToSelectedMovie: LiveData<Movie?> = _navigateToSelectedMovie
 
-    fun movies(tag: MovieTag) = moviesRepository.movies(tag)
+    fun observableMovieRows(): LiveData<List<MoviesRow>> =
+        MediatorLiveData<List<MoviesRow>>().apply {
+            value = listOf(
+                MoviesRow(UPCOMING),
+                MoviesRow(POPULAR),
+                MoviesRow(TOP_RATED)
+            )
+
+            addSource(moviesRepository.movies(UPCOMING)) {
+                value!!.find { d -> d.tag == UPCOMING }?.data = it
+                this.postValue(value)
+            }
+            addSource(moviesRepository.movies(POPULAR)) {
+                value!!.find { d -> d.tag == POPULAR }?.data = it
+                this.postValue(value)
+            }
+            addSource(moviesRepository.movies(TOP_RATED)) {
+                value!!.find { d -> d.tag == TOP_RATED }?.data = it
+                this.postValue(value)
+            }
+        }
+
     val status: LiveData<LoadingStatus> = moviesRepository.status()
 
-    fun notifyMovieClicked(it: DomainMovie) {
+    fun notifyMovieClicked(it: Movie) {
         _navigateToSelectedMovie.value = it
     }
 

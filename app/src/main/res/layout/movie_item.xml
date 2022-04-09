@@ -7,7 +7,7 @@
 
         <variable
             name="movie"
-            type="io.solidcrafts.playermaker.domain.DomainMovie" />
+            type="io.solidcrafts.playermaker.domain.Movie" />
 
         <variable
             name="clickListener"

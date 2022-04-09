@@ -11,7 +11,7 @@
 
         <variable
             name="categorizedMovies"
-            type="io.solidcrafts.playermaker.domain.CategorizedMovies" />
+            type="io.solidcrafts.playermaker.domain.MoviesRow" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

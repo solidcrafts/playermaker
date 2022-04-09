@@ -2,7 +2,7 @@ package io.solidcrafts.playermaker.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import io.solidcrafts.playermaker.domain.DomainMovie
+import io.solidcrafts.playermaker.domain.Movie
 
 @Entity
 data class DatabaseMovie constructor(
@@ -15,9 +15,9 @@ data class DatabaseMovie constructor(
     val isTopRated: Boolean
 )
 
-fun List<DatabaseMovie>.asDomainModel(): List<DomainMovie> {
+fun List<DatabaseMovie>.asDomainModel(): List<Movie> {
     return map {
-        DomainMovie(
+        Movie(
             id = it.id,
             title = it.title,
             posterPath = it.posterPath
