@@ -14,9 +14,7 @@ class MainVerticalAdapter(private val clickedListener: MovieClickedListener) :
 
     fun submitChanges(data: List<MoviesRow>) {
         submitList(data)
-        nestedAdapters.forEachIndexed { index, nestedAdapter ->
-            nestedAdapter.submitList(data[index].data)
-        }
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RowItemViewHolder {
@@ -45,7 +43,7 @@ class RowItemViewHolder(private val binding: MoviesRowBinding) :
 
 class RowDiffCallback : DiffUtil.ItemCallback<MoviesRow>() {
     override fun areItemsTheSame(oldItem: MoviesRow, newItem: MoviesRow): Boolean {
-        return oldItem.tag == newItem.tag
+        return oldItem == newItem
     }
 
     override fun areContentsTheSame(
