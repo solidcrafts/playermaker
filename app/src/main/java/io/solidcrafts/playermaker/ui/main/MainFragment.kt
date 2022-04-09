@@ -11,7 +11,10 @@ import io.solidcrafts.playermaker.databinding.FragmentMainBinding
 class MainFragment : Fragment() {
 
     private val viewModel: MainFragmentViewModel by lazy {
-        ViewModelProvider(this)[MainFragmentViewModel::class.java]
+        ViewModelProvider(
+            this,
+            MainFragmentViewModel.Factory(requireActivity().application)
+        )[MainFragmentViewModel::class.java]
     }
 
     override fun onCreateView(
