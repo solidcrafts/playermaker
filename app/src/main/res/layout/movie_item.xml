@@ -15,26 +15,30 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> clickListener.onClick(movie)}">
+        android:onClick="@{() -> clickListener.onClick(movie)}"
+        android:layout_margin="5dp">
 
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="0dp"
             android:layout_height="300dp"
-            app:movieDbApiPosterPath="@{movie.posterPath}"
-            app:movieDbApiPosterSize="@{200}"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toTopOf="@+id/textView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:movieDbApiPosterPath="@{movie.posterPath}"
+            app:movieDbApiPosterSize="@{200}"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text="@{movie.title}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
