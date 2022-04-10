@@ -11,7 +11,6 @@ import io.solidcrafts.playermaker.databinding.FragmentMainBinding
 import io.solidcrafts.playermaker.util.ScrollStateHolder
 
 class MainFragment : Fragment() {
-    private lateinit var scrollStateHolder: ScrollStateHolder
 
     private val viewModel: MainFragmentViewModel by lazy {
         ViewModelProvider(
@@ -28,10 +27,11 @@ class MainFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        scrollStateHolder = ScrollStateHolder(savedInstanceState)
-        binding.recyclerView.adapter = MainVerticalAdapter(scrollStateHolder, MovieClickedListener {
-            viewModel.notifyMovieClicked(it)
-        })
+        binding.recyclerView.adapter = MainVerticalAdapter(
+            getCurrentScrollStateHolder(savedInstanceState),
+            MovieClickedListener {
+                viewModel.notifyMovieClicked(it)
+            })
 
         viewModel.observableMovieRows().observe(viewLifecycleOwner) { data ->
             (binding.recyclerView.adapter as MainVerticalAdapter).submitChanges(data)
@@ -51,8 +51,22 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
+    private fun getCurrentScrollStateHolder(savedInstanceState: Bundle?): ScrollStateHolder {
+        val scrollStateHolder: ScrollStateHolder
+        when {
+            savedInstanceState != null -> scrollStateHolder =
+                ScrollStateHolder(savedInstanceState).also { viewModel.scrollStateHolder = it }
+
+            viewModel.scrollStateHolder != null -> scrollStateHolder = viewModel.scrollStateHolder!!
+
+            else -> scrollStateHolder =
+                ScrollStateHolder(null).also { viewModel.scrollStateHolder = it }
+        }
+        return scrollStateHolder
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        scrollStateHolder.onSaveInstanceState(outState)
+        viewModel.scrollStateHolder?.onSaveInstanceState(outState)
     }
 }

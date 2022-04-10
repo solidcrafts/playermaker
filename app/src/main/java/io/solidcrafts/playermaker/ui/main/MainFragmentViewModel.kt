@@ -9,15 +9,18 @@ import io.solidcrafts.playermaker.domain.MovieTag.*
 import io.solidcrafts.playermaker.network.NetworkService
 import io.solidcrafts.playermaker.repository.MoviesRepository
 import io.solidcrafts.playermaker.util.LoadingStatus
+import io.solidcrafts.playermaker.util.ScrollStateHolder
 import kotlinx.coroutines.launch
 
 class MainFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
     private val moviesRepository =
         MoviesRepository(MoviesDatabase.getInstance(application), NetworkService)
-
     private val _navigateToSelectedMovie = MutableLiveData<Movie?>()
+
     val navigateToSelectedMovie: LiveData<Movie?> = _navigateToSelectedMovie
+    val status: LiveData<LoadingStatus> = moviesRepository.status()
+    var scrollStateHolder: ScrollStateHolder? = null
 
     fun observableMovieRows(): LiveData<List<MoviesRow>> =
         MediatorLiveData<List<MoviesRow>>().apply {
@@ -40,8 +43,6 @@ class MainFragmentViewModel(application: Application) : AndroidViewModel(applica
                 this.postValue(value)
             }
         }
-
-    val status: LiveData<LoadingStatus> = moviesRepository.status()
 
     fun notifyMovieClicked(it: Movie) {
         _navigateToSelectedMovie.value = it
