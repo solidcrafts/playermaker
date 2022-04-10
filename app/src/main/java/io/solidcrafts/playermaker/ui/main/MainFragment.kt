@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import io.solidcrafts.playermaker.databinding.FragmentMainBinding
+import io.solidcrafts.playermaker.util.ScrollStateHolder
 
 class MainFragment : Fragment() {
+    private lateinit var scrollStateHolder: ScrollStateHolder
 
     private val viewModel: MainFragmentViewModel by lazy {
         ViewModelProvider(
@@ -26,7 +28,8 @@ class MainFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        binding.recyclerView.adapter = MainVerticalAdapter(MovieClickedListener {
+        scrollStateHolder = ScrollStateHolder(savedInstanceState)
+        binding.recyclerView.adapter = MainVerticalAdapter(scrollStateHolder, MovieClickedListener {
             viewModel.notifyMovieClicked(it)
         })
 
@@ -46,5 +49,10 @@ class MainFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        scrollStateHolder.onSaveInstanceState(outState)
     }
 }
